@@ -48,10 +48,12 @@ export function PositionSummaryCards({ trades }: PositionSummaryCardsProps) {
   const totalOpenValue = openTrades.reduce((sum, trade) => sum + trade.premiumReceived * trade.quantity * 100, 0)
 
   const totalUnrealizedPL = openTrades.reduce((sum, trade) => {
+    // Solo calcular P&L si tenemos el precio actual de la opción
     if (trade.currentOptionPrice !== undefined && trade.currentOptionPrice !== null) {
       return sum + (trade.premiumReceived - trade.currentOptionPrice) * trade.quantity * 100
     }
-    return sum + trade.premiumReceived * trade.quantity * 100
+    // Si no tenemos precio actual de la opción, asumir que mantenemos toda la prima (P&L = 0)
+    return sum
   }, 0)
 
   const totalRealizedPL = closedTrades.reduce((sum, trade) => sum + (trade.profitLoss || 0), 0)

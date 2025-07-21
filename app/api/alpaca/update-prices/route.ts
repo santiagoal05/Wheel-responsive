@@ -41,7 +41,7 @@ export async function POST() {
         console.log(`🔍 Processing ${trade.underlying} ${trade.option_type} $${trade.strike_price}`)
 
         // Call our own API route to get the option quote
-        const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000"
+        const baseUrl = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : `http://localhost:${process.env.PORT || 3002}`
 
         const quoteResponse = await fetch(`${baseUrl}/api/alpaca/option-quote`, {
           method: "POST",

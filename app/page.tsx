@@ -56,9 +56,13 @@ export default function OptionsWheelTracker() {
 
   // Calculate unrealized P&L using option prices
   const unrealizedPL = openTrades.reduce((sum, trade) => {
-    const currentPrice = trade.currentOptionPrice ?? 0;
-    const tradePL = (trade.premiumReceived - currentPrice) * trade.quantity * 100;
-    return sum + tradePL;
+    // Solo calcular P&L si tenemos el precio actual de la opción
+    if (trade.currentOptionPrice !== undefined && trade.currentOptionPrice !== null) {
+      const tradePL = (trade.premiumReceived - trade.currentOptionPrice) * trade.quantity * 100;
+      return sum + tradePL;
+    }
+    // Si no tenemos precio actual de la opción, asumir que mantenemos toda la prima
+    return sum + (trade.premiumReceived * trade.quantity * 100);
   }, 0);
 
   const winRate =
